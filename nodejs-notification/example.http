@@ -1,0 +1,10 @@
+POST   http://localhost:3000/api/posts HTTP/1.1
+content-type: application/json
+
+{
+    "title":"testpostmaadsan",
+    "content":"content"
+}
+
+### 
+GET  http://localhost:3000/api/posts HTTP/1.1
