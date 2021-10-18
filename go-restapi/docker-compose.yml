@@ -1,0 +1,43 @@
+version: '3.1'
+services:
+  app:
+    container_name: goserver
+    image: goserver
+    restart: always
+    build: ./
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+      - rabbitmq
+    links:
+      - mongo
+      - rabbitmq
+
+  mongo:
+    restart: always
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - db-data:/var/lib/mongo/data
+
+  rabbitmq:
+    restart: always
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+
+
+
+volumes:
+  db-data:
+    driver: local
