@@ -80,16 +80,14 @@ func CreatePost(ctx *fiber.Ctx) {
 
 }
 
-func UserLogin(ctx *fiber.Ctx) {
+func UserLogin(ctx *fiber.Ctx,requestType string) {
 	params := new(struct {
 		Username string
 		Password   string
 	})
 
 	ctx.BodyParser(&params)
-
-	userReq :=rabbitmq.UserReq{params.Username,params.Password,"login"}
-
+	userReq :=rabbitmq.UserReq{Username: params.Username, Password: params.Password, RequestType: requestType}
 	rabbitmq.RpcStart(userReq,ctx)
 
 }

@@ -30,7 +30,12 @@ func main() {
 	app.Get("/api/posts", controllers.GetAllPosts)
 	app.Get("/api/posts/:id", controllers.GetPostByID)
 	app.Post("/api/posts", controllers.CreatePost)
-	app.Post("/api/login", controllers.UserLogin)
+	app.Post("/api/login", func(ctx *fiber.Ctx) {
+		controllers.UserLogin(ctx,"login")
+	})
+	app.Post("/api/register", func(ctx *fiber.Ctx) {
+		controllers.UserLogin(ctx,"register")
+	})
 
 	app.Listen(3000)
 

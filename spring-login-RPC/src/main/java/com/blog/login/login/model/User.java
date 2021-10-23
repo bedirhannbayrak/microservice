@@ -1,28 +1,34 @@
 package com.blog.login.login.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity(name = "users")
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
+    @Column
     private int id;
 
-    @Column(name = "name",unique = true)
+    @Column(unique = true,nullable = false)
+    @NotBlank
+    @Size(min = 6)
     private String username;
 
-    @Column(name = "password")
+
+    @Column(nullable = false)
+    @NotBlank
+    @Size(min = 6)
     private String password;
+
 }

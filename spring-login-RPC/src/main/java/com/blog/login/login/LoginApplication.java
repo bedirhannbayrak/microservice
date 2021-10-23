@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,9 +18,13 @@ import org.springframework.context.annotation.Bean;
 import java.io.IOException;
 
 @SpringBootApplication
+@RequiredArgsConstructor
 public class LoginApplication {
 
     private static final String RPC_QUEUE_NAME = "rpc_queue";
+    private final Channel channel;
+    private final ObjectMapper objectMapper;
+    private final UserService userService;
 
     public static void main(String[] args) throws Exception {
 
@@ -29,21 +33,11 @@ public class LoginApplication {
         context.close();
     }
 
-    @Autowired
-    Channel channel;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    UserService userService;
-
     private void runDemo() throws Exception {
         setupCallbacks();
     }
 
     private void setupCallbacks() {
-
         try {
             channel.queueDeclare(RPC_QUEUE_NAME, false, false, false, null);
             channel.queuePurge(RPC_QUEUE_NAME);
@@ -88,12 +82,21 @@ public class LoginApplication {
                         channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, response.getBytes("UTF-8"));
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     }else if (requestType.equals("register")) {
-                        userService.saveUser(userReq);
-                        response = "kayıt işlemi başarılı";
+                        user = userService.saveUser(userReq);
+                        if (user != null) {
+                            response = objectMapper.writeValueAsString(UserRes.builder()
+                                    .status("success")
+                                    .username(user.getUsername())
+                                    .id(user.getId())
+                                    .build());
+                        }else{
+                            response = objectMapper.writeValueAsString(UserRes.builder().status("fail").build());
+                        }
+
                         channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, response.getBytes("UTF-8"));
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     }else {
-                        response = "bilinmeyen istek";
+                        response = objectMapper.writeValueAsString(UserRes.builder().status("Bilinmeyen bir istek").build());
                         channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, response.getBytes("UTF-8"));
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     }
@@ -121,10 +124,8 @@ public class LoginApplication {
         }
     }
 
-
     @Bean
     public ApplicationRunner runner() {
-
         return args -> runDemo();
     }
 

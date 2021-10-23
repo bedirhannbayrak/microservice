@@ -103,7 +103,7 @@ type UserReq struct {
 
 type  UserRes struct {
 	Username string `json:"username,omitempty"`
-	Id string `json:"id,omitempty"`
+	Id int `json:"id,omitempty"`
 	Status string `json:"status"`
 }
 

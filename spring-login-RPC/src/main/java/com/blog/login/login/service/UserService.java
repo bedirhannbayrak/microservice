@@ -6,13 +6,20 @@ import com.blog.login.login.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
 
-    public void saveUser(UserReq user) {
-        userRepository.save(User.builder().username(user.getUsername()).password(user.getPassword()).build());
+    public User saveUser(UserReq user) {
+        try {
+            return userRepository.save(User.builder().username(user.getUsername()).password(user.getPassword()).build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public User login(UserReq userReq) {
