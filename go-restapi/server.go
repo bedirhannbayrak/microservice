@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/Kamva/mgm/v2"
 	"github.com/bedirhannbayrak/blog/controllers"
+	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -26,6 +27,7 @@ func main() {
 	//rabbitmq.SendMessage("test")
 	//rabbitmq.RpcStart(nil)
 	app := fiber.New()
+	app.Use(cors.New())
 
 	app.Get("/api/posts", controllers.GetAllPosts)
 	app.Get("/api/posts/:id", controllers.GetPostByID)

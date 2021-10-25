@@ -1,7 +1,7 @@
 const amqp = require('amqplib/callback_api');
 const Notification = require('../models/Notification');
 
-module.exports = () =>
+module.exports = (io) =>
   amqp.connect(
     'amqp://guest:guest@localhost:5672/',
     function (error0, connection) {
@@ -30,6 +30,13 @@ module.exports = () =>
               description: `${msgJson.title} isimli yazınız yayınlandı`,
               link: msgJson.title,
             };
+
+            setTimeout(() => {
+              io.to(msgJson.socket_id).emit('getNotification', {
+                newMsg,
+              });
+            }, 1000 * 10);
+
             console.log(newMsg);
             const notification = new Notification(newMsg);
             notification

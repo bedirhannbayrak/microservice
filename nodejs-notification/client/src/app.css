@@ -1,0 +1,29 @@
+body {
+  height: 100vh;
+}
+
+button {
+  width: 60%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.posts {
+  margin: 1rem auto;
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(10rem, 500px), 1fr));
+  gap: 10px 10px;
+}
+
+.unauthorized {
+  margin: 0 auto;
+  width: 60vw;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

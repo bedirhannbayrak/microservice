@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const { Server } = require('socket.io');
 const createPostConsumer = require('./rabbitmq/createPostConsumer');
 
 mongoose
@@ -12,4 +12,19 @@ mongoose
     console.error(err);
   });
 
-createPostConsumer();
+const io = new Server({
+  cors: {
+    origin: '*',
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log('connected');
+  socket.on('disconnect', () => {
+    console.log('disconnected');
+  });
+});
+
+createPostConsumer(io);
+
+io.listen(5000);

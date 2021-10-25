@@ -54,9 +54,10 @@ func GetPostByID(ctx *fiber.Ctx) {
 
 func CreatePost(ctx *fiber.Ctx) {
 	params := new(struct {
-		UserId string
-		Title   string
-		Content string
+		UserId string `json:"user_id"`
+		Title   string `json:"title"`
+		Content string `json:"content"`
+		SocketId string `json:"socket_id"`
 	})
 
 	ctx.BodyParser(&params)
@@ -71,7 +72,7 @@ func CreatePost(ctx *fiber.Ctx) {
 		})
 		return
 	}
-	msg,_:= json.Marshal(post)
+	msg,_:= json.Marshal(PostReq{params.UserId,params.Title,params.Content,params.SocketId})
 	rabbitmq.SendMessage([]byte(msg))
 	ctx.JSON(fiber.Map{
 		"ok":   true,
@@ -90,4 +91,11 @@ func UserLogin(ctx *fiber.Ctx,requestType string) {
 	userReq :=rabbitmq.UserReq{Username: params.Username, Password: params.Password, RequestType: requestType}
 	rabbitmq.RpcStart(userReq,ctx)
 
+}
+
+type PostReq struct {
+UserId string `json:"user_id"`
+Title   string `json:"title"`
+Content string `json:"content"`
+SocketId string `json:"socket_id"`
 }
