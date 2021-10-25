@@ -23,8 +23,8 @@ const CreatePost = () => {
   };
 
   return (
-    <div className='login'>
-      <h2>Create Post</h2>
+    <div className='form'>
+      <h2 className='form-heading'>Create Post</h2>
       <form onSubmit={handleSubmit}>
         <input
           type='text'

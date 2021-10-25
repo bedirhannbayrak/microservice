@@ -35,7 +35,7 @@ module.exports = (io) =>
               io.to(msgJson.socket_id).emit('getNotification', {
                 newMsg,
               });
-            }, 1000 * 10);
+            }, 1000 * 5);
 
             console.log(newMsg);
             const notification = new Notification(newMsg);

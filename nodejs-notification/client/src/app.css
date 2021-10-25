@@ -27,3 +27,33 @@ button {
   align-items: center;
   justify-content: center;
 }
+
+.form {
+  margin: 0 auto;
+  width: 60vw;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.form form {
+  display: flex;
+  flex-direction: column;
+}
+
+form label input {
+  display: block;
+  margin-top: 5px;
+}
+
+.form-heading {
+  margin-bottom: 1rem;
+}
+
+input {
+  margin-bottom: 1rem;
+}
+textarea {
+  margin-bottom: 1rem;
+}

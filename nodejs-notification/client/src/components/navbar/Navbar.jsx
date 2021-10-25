@@ -40,10 +40,19 @@ const Navbar = () => {
         <Link to='/posts' className='logo'>
           Posts
         </Link>
-        {loggedIn && (
+        {loggedIn ? (
           <Link to='/posts/add' className='logo'>
             Create Post
           </Link>
+        ) : (
+          <>
+            <Link to='/login' className='logo'>
+              Login
+            </Link>
+            <Link to='/register' className='logo'>
+              Register
+            </Link>
+          </>
         )}
       </div>
 
